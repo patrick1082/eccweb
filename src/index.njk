@@ -1,0 +1,58 @@
+---
+layout: base.njk
+title: Portada
+description: Aprende ECC (Everything Claude Code) desde cero, en español, hasta orquestar flujos completos.
+---
+<section class="hero">
+  <p class="eyebrow"><span class="prompt" aria-hidden="true">&gt;</span> manual local · ECC {{ site.eccVersion }}</p>
+  <h1>Aprende ECC desde cero <span class="accent">y orquesta desde el primer día</span></h1>
+  <p class="hero-lead">ECC (Everything Claude Code) añade a Claude Code decenas de agentes, cientos de skills y un sistema de hooks. Su documentación da por hecho que ya sabes cómo encaja todo. Este manual te lleva paso a paso, en español, desde los conceptos hasta los flujos orquestados.</p>
+  <div class="hero-actions">
+    <a class="button" href="{{ site.levels[0].guides[0].url }}">Empezar desde cero</a>
+    <a class="button button-ghost" href="#ruta">Ver la ruta completa</a>
+  </div>
+</section>
+
+<section class="audience" aria-labelledby="para-quien">
+  <h2 id="para-quien">Para quién es este manual</h2>
+  <ul class="audience-list">
+    <li><strong>Ya usas CXO</strong> y quieres sacar el mismo partido a ECC dentro de Claude Code.</li>
+    <li><strong>Has instalado ECC</strong> pero no sabes qué comando, skill o agente usar en cada momento.</li>
+    <li><strong>Quieres entender</strong> lo que pasa por debajo, no memorizar una lista de comandos.</li>
+  </ul>
+</section>
+
+<section class="route" id="ruta" aria-labelledby="ruta-titulo">
+  <h2 id="ruta-titulo">La ruta de aprendizaje</h2>
+  <p class="section-lead">Cuatro niveles. Cada uno se apoya en el anterior y termina con una práctica que puedes comprobar en tu propia sesión.</p>
+  <ol class="level-list">
+    {% for level in site.levels %}
+    <li class="level-card{% if level.status != 'disponible' %} is-upcoming{% endif %}" id="{{ level.id }}">
+      <div class="level-head">
+        <span class="level-number" aria-hidden="true">{{ level.number }}</span>
+        <div>
+          <h3>Nivel {{ level.number }} · {{ level.title }}</h3>
+          <p>{{ level.description }}</p>
+        </div>
+        {% if level.status != 'disponible' %}<span class="tag">Próximamente</span>{% else %}<span class="tag tag-ready">Disponible</span>{% endif %}
+      </div>
+      {% if level.status == 'disponible' %}
+      <ol class="guide-list">
+        {% for guide in level.guides %}
+        <li><a href="{{ guide.url }}"><span class="guide-number" aria-hidden="true">{{ guide.number }}</span><span class="guide-title">{{ guide.title }}</span><span class="guide-detail">{{ guide.detail }}</span><span class="guide-time">{{ guide.time }}</span></a></li>
+        {% endfor %}
+      </ol>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="promise" aria-labelledby="como-funciona">
+  <h2 id="como-funciona">Cómo está pensado</h2>
+  <div class="promise-grid">
+    <div><h3>Entiende primero</h3><p>Cada guía explica el porqué antes del cómo, con analogías y ejemplos reales de ECC {{ site.eccVersion }}.</p></div>
+    <div><h3>Comprueba después</h3><p>Las prácticas se hacen en tu propia sesión de Claude Code y terminan con una lista para saber si lo has conseguido.</p></div>
+    <div><h3>Sin sorpresas</h3><p>El manual no ejecuta nada ni se conecta a internet. Solo te enseña; tú decides qué escribir en tu terminal.</p></div>
+  </div>
+</section>

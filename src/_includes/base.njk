@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ description or site.description }}">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>{{ title }} · ECC</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="ECC, portada del manual"><span class="brand-spark" aria-hidden="true">✻</span><span class="brand-name">ECC</span><span class="brand-caption">Manual de orquestación</span></a>
+    <nav class="header-links" aria-label="Accesos rápidos">
+      <a href="/#ruta">Ruta</a>
+      <a href="/nivel-1/piezas/#glosario">Glosario</a>
+    </nav>
+  </header>
+  <div class="site-shell">
+    <aside class="sidebar">
+      <nav aria-label="Índice del manual">{% include "navigation.njk" %}</nav>
+    </aside>
+    <div class="page-column">
+      <details class="mobile-navigation">
+        <summary>Explorar el manual <span aria-hidden="true">+</span></summary>
+        <nav aria-label="Índice móvil">{% include "navigation.njk" %}</nav>
+      </details>
+      <main id="contenido" tabindex="-1">{{ content | safe }}</main>
+      <footer class="site-footer">
+        <span><span class="prompt" aria-hidden="true">&gt;</span> Documentado para ECC {{ site.eccVersion }} · revisado el {{ site.reviewed }}</span>
+        <span>Edición local · sin conexión a internet</span>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "ECC · Manual de orquestación",
+  "description": "Aprende ECC (Everything Claude Code) desde cero, en español, hasta orquestar flujos completos.",
+  "eccVersion": "2.2.3",
+  "reviewed": "2026-10-15",
+  "levels": [
+    {
+      "number": "1", "id": "nivel-1", "title": "Conceptos", "status": "disponible",
+      "description": "Qué es ECC, cuáles son sus piezas y cómo trabajan juntas.",
+      "guides": [
+        { "number": "01", "title": "Qué es ECC", "url": "/nivel-1/que-es-ecc/", "detail": "Qué añade ECC a Claude Code y cómo encaja con CXO.", "time": "6 min" },
+        { "number": "02", "title": "Las seis piezas", "url": "/nivel-1/piezas/", "detail": "Agentes, skills, comandos, hooks, rules y MCP.", "time": "12 min" },
+        { "number": "03", "title": "Cómo se relacionan", "url": "/nivel-1/como-se-relacionan/", "detail": "Sigue un comando real desde que lo escribes hasta el resultado.", "time": "10 min" },
+        { "number": "04", "title": "Comprobar mi ECC", "url": "/nivel-1/comprobar/", "detail": "Práctica: encuentra cada pieza en tu propia sesión.", "time": "15 min" }
+      ]
+    },
+    {
+      "number": "2", "id": "nivel-2", "title": "Comandos esenciales", "status": "proximamente",
+      "description": "El conjunto mínimo de comandos para trabajar cada día.",
+      "guides": []
+    },
+    {
+      "number": "3", "id": "nivel-3", "title": "Flujos de trabajo", "status": "proximamente",
+      "description": "De la idea al PR: PRD, plan, TDD, revisión y commit.",
+      "guides": []
+    },
+    {
+      "number": "4", "id": "nivel-4", "title": "Orquestación", "status": "proximamente",
+      "description": "Comandos orch-*, varios agentes a la vez y loops autónomos.",
+      "guides": []
+    }
+  ]
+}

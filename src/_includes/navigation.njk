@@ -1,0 +1,13 @@
+<a class="nav-home{% if page.url == '/' %} is-current{% endif %}" href="/"{% if page.url == '/' %} aria-current="page"{% endif %}>Portada</a>
+{% for level in site.levels %}
+<p class="nav-label"><span class="nav-level">{{ level.number }}</span> {{ level.title }}</p>
+{% if level.status == 'disponible' %}
+<ol class="nav-list">
+  {% for guide in level.guides %}
+  <li><a href="{{ guide.url }}"{% if page.url == guide.url %} class="is-current" aria-current="page"{% endif %}><span class="nav-number" aria-hidden="true">{{ guide.number }}</span>{{ guide.title }}</a></li>
+  {% endfor %}
+</ol>
+{% else %}
+<p class="nav-upcoming">Próximamente</p>
+{% endif %}
+{% endfor %}
