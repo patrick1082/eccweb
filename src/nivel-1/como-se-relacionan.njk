@@ -1,0 +1,110 @@
+---
+layout: guide.njk
+title: Cómo se relacionan
+description: Sigue un comando real desde que lo escribes hasta que obtienes el resultado, y mira qué pieza actúa en cada momento.
+number: "03"
+time: 10 min
+goal: Sabrás seguir el recorrido de un comando de ECC y decir en cada paso qué pieza está actuando y por qué.
+toc:
+  - { id: el-recorrido-de-una-peticion, title: El recorrido de una petición }
+  - { id: paso-a-paso, title: Paso a paso }
+  - { id: un-caso-real-del-prd-al-plan, title: "Un caso real: del PRD al plan" }
+  - { id: cuidado-con-los-nombres-parecidos, title: Cuidado con los nombres parecidos }
+  - { id: la-idea-clave, title: La idea clave }
+---
+<h2 id="el-recorrido-de-una-peticion">El recorrido de una petición</h2>
+<p>Las seis piezas no trabajan por separado. Cuando escribes un <strong>comando</strong>, Claude recibe un <strong>procedimiento</strong>: las instrucciones del propio comando o de una <strong>skill</strong>. Si el procedimiento lo pide, Claude encarga partes del trabajo a <strong>agentes</strong>. Mientras tanto, los <strong>hooks</strong> vigilan cada herramienta que se usa, las <strong>rules</strong> están presentes durante todo el camino y los servidores <strong>MCP</strong> aportan herramientas extra cuando hacen falta.</p>
+
+<figure class="diagram">
+  <svg viewBox="0 0 720 330" role="img" aria-labelledby="diagrama-titulo diagrama-desc">
+    <title id="diagrama-titulo">Flujo de ECC: comando, procedimiento de comando o skill, agente opcional y resultado</title>
+    <desc id="diagrama-desc">Tú escribes un comando. Claude sigue su procedimiento, escrito en el comando o en una skill. Si hace falta, delega en agentes, y el trabajo termina en un resultado. Los hooks vigilan cada herramienta durante todo el recorrido y las rules están siempre presentes.</desc>
+    <defs>
+      <marker id="flecha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="d-arrow-head"/></marker>
+    </defs>
+    <g class="d-step">
+      <rect x="8" y="30" width="156" height="96" rx="10"/>
+      <text x="86" y="62" class="d-kicker">1 · Tú</text>
+      <text x="86" y="88" class="d-title">Comando</text>
+      <text x="86" y="110" class="d-code">/ecc:review-pr</text>
+    </g>
+    <g class="d-step">
+      <rect x="190" y="30" width="156" height="96" rx="10"/>
+      <text x="268" y="62" class="d-kicker">2 · Procedimiento</text>
+      <text x="268" y="88" class="d-title">Comando o skill</text>
+      <text x="268" y="110" class="d-code">pasos a seguir</text>
+    </g>
+    <g class="d-step">
+      <rect x="372" y="30" width="156" height="96" rx="10"/>
+      <text x="450" y="62" class="d-kicker">3 · Si hace falta</text>
+      <text x="450" y="88" class="d-title">Agente(s)</text>
+      <text x="450" y="110" class="d-code">ecc:code-reviewer</text>
+    </g>
+    <g class="d-step d-result">
+      <rect x="554" y="30" width="158" height="96" rx="10"/>
+      <text x="633" y="62" class="d-kicker">4 · Resultado</text>
+      <text x="633" y="88" class="d-title">Informe</text>
+      <text x="633" y="110" class="d-code">o archivo</text>
+    </g>
+    <line x1="166" y1="78" x2="186" y2="78" class="d-arrow" marker-end="url(#flecha)"/>
+    <line x1="348" y1="78" x2="368" y2="78" class="d-arrow" marker-end="url(#flecha)"/>
+    <line x1="530" y1="78" x2="550" y2="78" class="d-arrow" marker-end="url(#flecha)"/>
+    <line x1="268" y1="128" x2="268" y2="186" class="d-link"/>
+    <line x1="450" y1="128" x2="450" y2="186" class="d-link"/>
+    <line x1="633" y1="128" x2="633" y2="186" class="d-link"/>
+    <g class="d-band d-hooks">
+      <rect x="8" y="188" width="704" height="54" rx="10"/>
+      <text x="360" y="211" class="d-title">Hooks</text>
+      <text x="360" y="231" class="d-note">vigilan cada herramienta (leer, escribir, ejecutar) antes y después de usarla</text>
+    </g>
+    <g class="d-band d-rules">
+      <rect x="8" y="258" width="704" height="54" rx="10"/>
+      <text x="360" y="281" class="d-title">Rules</text>
+      <text x="360" y="301" class="d-note">normas permanentes que Claude tiene presentes en todo el recorrido</text>
+    </g>
+  </svg>
+  <figcaption>El comando es la puerta de entrada; el procedimiento dice cómo hacer el trabajo; los agentes ayudan cuando hace falta; hooks y rules lo vigilan todo.</figcaption>
+</figure>
+
+<h2 id="paso-a-paso">Paso a paso</h2>
+<ol>
+  <li><strong>Escribes el comando.</strong> Al escribir, por ejemplo, <code>/ecc:review-pr</code>, Claude Code busca ese nombre entre las piezas instaladas.</li>
+  <li><strong>Claude recibe el procedimiento.</strong> Unas veces está escrito en el propio archivo del comando; otras, el comando es solo una puerta que carga una skill. En ambos casos Claude lee qué hacer, en qué orden y qué entregar al final.</li>
+  <li><strong>Claude delega si hace falta.</strong> Cuando el procedimiento lo pide, Claude encarga una parte a uno o varios agentes. <code>/ecc:review-pr</code>, por ejemplo, reparte la revisión entre agentes especializados como <code>ecc:code-reviewer</code>. Otros comandos, como <code>/ecc:plan</code>, trabajan sin agentes.</li>
+  <li><strong>Los hooks vigilan cada herramienta.</strong> Cada vez que Claude o un agente lee, escribe o ejecuta algo, los hooks de ECC se activan antes y después. Si algo no cumple las normas, avisan o bloquean.</li>
+  <li><strong>Obtienes el resultado.</strong> Un archivo, un informe o un cambio en el código, y casi siempre un siguiente paso sugerido.</li>
+</ol>
+
+<h2 id="un-caso-real-del-prd-al-plan">Un caso real: del PRD al plan</h2>
+<p>Este mismo manual nació con este flujo. Así fue cada paso y qué pieza actuó:</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Qué pasó</th><th>Pieza</th><th>Por qué</th></tr></thead>
+  <tbody>
+    <tr><td>Se escribió <code>/ecc:plan-prd pagina web manual de usuario para ECC</code></td><td>Comando</td><td>Es la puerta de entrada al flujo de requisitos.</td></tr>
+    <tr><td>Claude hizo preguntas en cuatro fases: encuadre, evidencia, decisión y generación</td><td>Procedimiento del comando <code>plan-prd</code></td><td>El archivo del comando fija esas fases y obliga a esperar las respuestas. No intervino ningún agente.</td></tr>
+    <tr><td>Antes de crear el archivo apareció <code>[Fact-Forcing Gate]</code></td><td>Hook GateGuard</td><td>La primera escritura de cada archivo exige explicar qué se cambia y por qué.</td></tr>
+    <tr><td>Se creó <code>.claude/prds/ecc-manual-web.prd.md</code></td><td>Resultado</td><td>La skill termina escribiendo el PRD y sugiriendo el siguiente paso.</td></tr>
+    <tr><td>El siguiente paso fue planificar el primer milestone</td><td>Comando de plan</td><td>Convierte un milestone del PRD en un plan de implementación que tú apruebas.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Fíjate en que <strong>nadie tuvo que pedir el hook</strong>: se activó solo. Y en que el comando <strong>no escribió código</strong>: un PRD solo dice qué y por qué. El cómo llega con el plan. Tampoco hizo falta ningún agente: no todos los comandos los usan.</p>
+
+<h2 id="cuidado-con-los-nombres-parecidos">Cuidado con los nombres parecidos</h2>
+<p>Algunos comandos de ECC se llaman igual que funciones integradas de Claude Code. El caso más común es <code>/plan</code>:</p>
+<ul>
+  <li><code>/plan</code> sin prefijo puede activar el <strong>modo plan integrado de Claude Code</strong>: Claude solo investiga y escribe un plan, sin tocar nada hasta que lo apruebes.</li>
+  <li><code>/ecc:plan</code> es el <strong>comando de planificación de ECC</strong>: reformula los requisitos, evalúa riesgos, escribe el plan en la propia conversación y espera tu confirmación.</li>
+</ul>
+<p>Los dos te dan un plan antes de tocar el código, pero son piezas distintas. <strong>Si quieres estar seguro de usar la de ECC, escribe el prefijo <code>ecc:</code>.</strong></p>
+
+<h2 id="la-idea-clave">La idea clave</h2>
+<p>Cuando algo ocurra en tu sesión, pregúntate: <strong>¿lo he pedido yo, lo ha decidido Claude o ha saltado solo?</strong></p>
+<ul>
+  <li>Si lo has pedido tú con <code>/</code>, es un <strong>comando</strong>.</li>
+  <li>Si Claude sigue unos pasos fijos, hay un <strong>procedimiento</strong> detrás: el de un comando o el de una <strong>skill</strong>.</li>
+  <li>Si Claude encarga trabajo a alguien con nombre <code>ecc:…</code>, es un <strong>agente</strong>.</li>
+  <li>Si ha saltado solo, con un mensaje entre corchetes, es un <strong>hook</strong>.</li>
+</ul>
+<p>En la siguiente guía practicarás justo eso en tu propia sesión.</p>

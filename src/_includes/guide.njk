@@ -1,0 +1,26 @@
+---
+layout: base.njk
+---
+{% set turn = page.url | pathNeighbors %}
+{% set level = page.url | guideLevel %}
+<div class="reading-layout">
+  <article class="guide">
+    <header class="guide-header">
+      {% if level %}<p class="eyebrow"><a href="/#{{ level.id }}">Nivel {{ level.number }} · {{ level.title }}</a><span aria-hidden="true"> / </span>Guía {{ number }} de {{ level.total }}</p>{% endif %}
+      <h1>{{ title }}</h1>
+      <p class="guide-lead">{{ description }}</p>
+      {% if time %}<p class="guide-meta">{{ time }} · nivel inicial</p>{% endif %}
+    </header>
+    {% if goal %}<div class="learning-goal"><span class="label">Al terminar</span><p>{{ goal }}</p></div>{% endif %}
+    <div class="prose">{{ content | safe }}</div>
+    <nav class="page-turn" aria-label="Continuar el recorrido">
+      <a class="previous-page" href="{{ turn.previous.url }}"><span class="label">Anterior</span><span><span aria-hidden="true">← </span>{{ turn.previous.title }}</span></a>
+      <a class="next-page" href="{{ turn.next.url }}"><span class="label">{{ turn.next.label or 'Siguiente' }}</span><span>{{ turn.next.title }} <span aria-hidden="true">→</span></span></a>
+    </nav>
+  </article>
+  {% if toc %}
+  <aside class="table-of-contents">
+    <nav aria-label="En esta guía"><p class="label">En esta guía</p><ol>{% for item in toc %}<li><a href="#{{ item.id }}">{{ item.title }}</a></li>{% endfor %}</ol></nav>
+  </aside>
+  {% endif %}
+</div>
