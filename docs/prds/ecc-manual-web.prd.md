@@ -47,14 +47,14 @@ Sabremos que acertamos cuando **el usuario completa un flujo orquestado de punta
 | # | Milestone | Outcome | Status | Plan |
 |---|---|---|---|---|
 | 1 | Esqueleto y nivel 1 | El usuario abre el sitio en local y entiende los conceptos base de ECC | complete | `ecc_web/docs/plans/milestone-1.plan.md` |
-| 2 | Niveles 2 y 3 | El usuario conoce los comandos esenciales y sigue un flujo PRD → PR guiado | pending | — |
+| 2 | Niveles 2 y 3 | El usuario conoce los comandos esenciales y sigue un flujo PRD → PR guiado | complete | `ecc_web/docs/plans/milestone-2.plan.md` |
 | 3 | Nivel 4: orquestación | El usuario entiende y lanza flujos `orch-*` y multiagente | pending | — |
 | 4 | Índice por tarea + buscador | El usuario encuentra el comando adecuado para una tarea sin recorrer la ruta | pending | — |
 | 5 | Validación | Se ejecutan las métricas (flujo completo + 10 escenarios) y se registran los resultados | pending | — |
 
 ## Open Questions
-- [ ] ¿Cómo se mantiene el manual al día cuando ECC añade, renombra o depreca comandos y skills? (riesgo de desactualización)
-- [ ] ¿Qué conjunto exacto de comandos forma los "esenciales" del nivel 2? TBD — needs validation via revisión del uso real del autor con ECC.
+- [x] ¿Cómo se mantiene el manual al día cuando ECC añade, renombra o depreca comandos y skills? — Resuelto (milestone 2): `test/ecc-surface.test.js` contrasta cada `/ecc:…`, `ecc:…` y «skill …» citados con el plugin de `site.eccVersion`; al actualizar ECC se cambia la versión y `npm test` señala lo que ya no existe. Las afirmaciones de comportamiento siguen requiriendo revisión manual.
+- [x] ¿Qué conjunto exacto de comandos forma los "esenciales" del nivel 2? — Resuelto (milestone 2): selección basada en la Quick Decision Guide de ECC 2.2.3, ampliada con plan-prd, prp-commit, pr, aside y ecc-guide. Pendiente validar con el uso real del autor.
 - [ ] ¿Hay que cubrir comandos que dependen de runtimes externos (p. ej. `multi-*`, que requiere ccg-workflow) o se dejan fuera del MVP?
 - [ ] ¿Cómo se relaciona el manual con CXO: referencias cruzadas o independencia total?
 

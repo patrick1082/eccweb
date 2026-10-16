@@ -1,0 +1,87 @@
+---
+layout: guide.njk
+title: El flujo completo
+description: Las seis etapas que llevan una idea hasta un cambio integrado, qué controla cada puerta y quién decide en cada una.
+number: "01"
+time: 8 min
+goal: Sabrás ordenar las seis etapas del flujo de ECC, qué archivo deja cada una y en qué momentos te toca decidir a ti.
+toc:
+  - { id: de-la-idea-al-cambio-integrado, title: De la idea al cambio integrado }
+  - { id: etapa-por-etapa, title: Etapa por etapa }
+  - { id: las-puertas, title: Las puertas }
+  - { id: si-vienes-de-cxo, title: Si vienes de CXO }
+  - { id: lo-que-vas-a-practicar, title: Lo que vas a practicar }
+---
+<h2 id="de-la-idea-al-cambio-integrado">De la idea al cambio integrado</h2>
+<p>En el nivel 2 conociste los comandos por separado. Aquí los ves <strong>encadenados</strong>: cada etapa deja un resultado que la siguiente usa como punto de partida. Así no hay que explicarle todo a Claude en cada paso, y tú puedes revisar cada resultado antes de continuar.</p>
+
+<figure class="diagram">
+  <svg viewBox="0 0 720 300" role="img" aria-labelledby="flujo-titulo flujo-desc">
+    <title id="flujo-titulo">Flujo completo de ECC: PRD, plan, TDD, revisión, commit y entrega</title>
+    <desc id="flujo-desc">Seis etapas en dos filas. Primera fila: PRD con /ecc:plan-prd, plan con /ecc:plan y TDD con la skill tdd-workflow. Segunda fila: revisión con /ecc:code-review, commit con /ecc:prp-commit y entrega con merge o /ecc:pr. Tú respondes al PRD y apruebas el plan; no se sigue tras la revisión mientras haya problemas CRITICAL o HIGH; la entrega la decides tú.</desc>
+    <defs>
+      <marker id="flecha-flujo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="d-arrow-head"/></marker>
+    </defs>
+    <g class="d-step d-gate"><rect x="10" y="20" width="200" height="104" rx="10"/>
+      <text x="110" y="46" class="d-kicker">1 · Requisitos</text><text x="110" y="72" class="d-title">PRD</text>
+      <text x="110" y="93" class="d-code">/ecc:plan-prd</text><text x="110" y="113" class="d-gate-text">puerta: tú respondes</text></g>
+    <g class="d-step d-gate"><rect x="260" y="20" width="200" height="104" rx="10"/>
+      <text x="360" y="46" class="d-kicker">2 · Cómo</text><text x="360" y="72" class="d-title">Plan</text>
+      <text x="360" y="93" class="d-code">/ecc:plan</text><text x="360" y="113" class="d-gate-text">puerta: tú apruebas</text></g>
+    <g class="d-step"><rect x="510" y="20" width="200" height="104" rx="10"/>
+      <text x="610" y="46" class="d-kicker">3 · Código</text><text x="610" y="72" class="d-title">TDD</text>
+      <text x="610" y="93" class="d-code">tdd-workflow</text><text x="610" y="113" class="d-note">rojo → verde → refactor</text></g>
+    <g class="d-step d-gate"><rect x="10" y="176" width="200" height="104" rx="10"/>
+      <text x="110" y="202" class="d-kicker">4 · Calidad</text><text x="110" y="228" class="d-title">Revisión</text>
+      <text x="110" y="249" class="d-code">/ecc:code-review</text><text x="110" y="269" class="d-gate-text">sin CRITICAL ni HIGH</text></g>
+    <g class="d-step"><rect x="260" y="176" width="200" height="104" rx="10"/>
+      <text x="360" y="202" class="d-kicker">5 · Guardar</text><text x="360" y="228" class="d-title">Commit</text>
+      <text x="360" y="249" class="d-code">/ecc:prp-commit</text><text x="360" y="269" class="d-note">guarda los arreglos</text></g>
+    <g class="d-step d-result"><rect x="510" y="176" width="200" height="104" rx="10"/>
+      <text x="610" y="202" class="d-kicker">6 · Integrar</text><text x="610" y="228" class="d-title">Entrega</text>
+      <text x="610" y="249" class="d-code">merge o /ecc:pr</text><text x="610" y="269" class="d-gate-text">puerta: tú decides</text></g>
+    <line x1="212" y1="72" x2="256" y2="72" class="d-arrow" marker-end="url(#flecha-flujo)"/>
+    <line x1="462" y1="72" x2="506" y2="72" class="d-arrow" marker-end="url(#flecha-flujo)"/>
+    <path d="M610 126 V150 H110 V172" class="d-arrow d-path" marker-end="url(#flecha-flujo)"/>
+    <line x1="212" y1="228" x2="256" y2="228" class="d-arrow" marker-end="url(#flecha-flujo)"/>
+    <line x1="462" y1="228" x2="506" y2="228" class="d-arrow" marker-end="url(#flecha-flujo)"/>
+  </svg>
+  <figcaption>Las etapas con borde naranja son puertas: el flujo no avanza hasta que se cumple su condición.</figcaption>
+</figure>
+
+<h2 id="etapa-por-etapa">Etapa por etapa</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Etapa</th><th>Pieza</th><th>Deja como resultado</th></tr></thead>
+  <tbody>
+    <tr><td>1 · PRD</td><td><code>/ecc:plan-prd</code></td><td><code>.claude/prds/{nombre}.prd.md</code> con problema, hipótesis, alcance y entregas</td></tr>
+    <tr><td>2 · Plan</td><td><code>/ecc:plan</code> con la ruta del PRD</td><td><code>.claude/plans/{nombre}.plan.md</code> con tareas y validación; la entrega pasa a <code>in-progress</code></td></tr>
+    <tr><td>3 · TDD</td><td>skill <code>tdd-workflow</code> con la ruta del plan</td><td>Pruebas, código, commits de control (rojo, verde, refactor) y un informe de evidencia</td></tr>
+    <tr><td>4 · Revisión</td><td>el agente <code>ecc:code-reviewer</code> sobre la rama, y <code>/ecc:code-review</code> para los arreglos sin commit</td><td>Lista de problemas por gravedad, y sus arreglos</td></tr>
+    <tr><td>5 · Commit</td><td><code>/ecc:prp-commit</code></td><td>Un commit con los arreglos de la revisión (lo demás ya lo guardó TDD)</td></tr>
+    <tr><td>6 · Entrega</td><td>merge local o <code>/ecc:pr</code></td><td>El cambio integrado en la rama principal, o un pull request en GitHub</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="las-puertas">Las puertas</h2>
+<p>Una puerta es un punto en el que el flujo <strong>se detiene hasta que se cumple una condición</strong>. El diagrama marca cuatro:</p>
+<ul>
+  <li><strong>PRD</strong>: Claude no avanza de fase hasta que respondes, y lo que no sabes queda marcado como suposición.</li>
+  <li><strong>Plan</strong>: no se escribe código hasta que apruebas.</li>
+  <li><strong>Revisión</strong>: con un problema CRITICAL o HIGH, el procedimiento indica no seguir hasta arreglarlo. Lo cumple Claude siguiendo sus instrucciones, no un mecanismo automático, así que vigílalo tú también.</li>
+  <li><strong>Entrega</strong>: integrar es decisión tuya.</li>
+</ul>
+<p>Las otras dos etapas no son puertas, pero sí <strong>buenas prácticas</strong> que dan confianza. En <strong>TDD</strong>, el código no se da por bueno sin una prueba que primero falló y luego pasó. En el <strong>commit</strong>, si activas el perfil de hooks <code>strict</code>, un hook busca secretos antes de guardar.</p>
+
+<h2 id="si-vienes-de-cxo">Si vienes de CXO</h2>
+<p>La forma es la misma que ya conoces: requisitos, plan aprobado, implementación, revisión e integración que tú decides. La diferencia es <strong>dónde ocurre</strong>: en CXO coordinas trabajadores de Codex desde la terminal; en ECC todo pasa dentro de tu sesión de Claude Code, etapa a etapa, y cada etapa la lanzas tú con un comando.</p>
+
+<h2 id="lo-que-vas-a-practicar">Lo que vas a practicar</h2>
+<p>En las tres guías siguientes recorrerás el flujo entero con un proyecto pequeño: un programa que encuentra las <strong>palabras más frecuentes</strong> de un texto.</p>
+<ol>
+  <li><a href="/nivel-3/de-la-idea-al-plan/">De la idea al plan</a>: etapas 1 y 2.</li>
+  <li><a href="/nivel-3/implementar-con-tdd/">Implementar con TDD</a>: etapa 3.</li>
+  <li><a href="/nivel-3/revisar-y-entregar/">Revisar, hacer commit y entregar</a>: etapas 4, 5 y 6.</li>
+</ol>
+<p>Reserva una hora. Puedes parar entre guías: al final de cada una tendrás un archivo que te permite retomar.</p>

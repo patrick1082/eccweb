@@ -336,6 +336,52 @@ main:focus { outline: none; }
 .d-arrow { stroke: var(--accent); stroke-width: 2; }
 .d-arrow-head { fill: var(--accent); }
 .d-link { stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.d-gate rect { stroke: var(--accent); }
+.d-gate-text { fill: var(--accent-strong); font-size: 12px; font-family: var(--mono); }
+.d-path { fill: none; }
+
+/* Scenarios */
+kbd {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--surface-2);
+}
+.scenario-list { display: grid; gap: 0.7rem; margin: 1.2rem 0; }
+.scenario {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.scenario[open] { border-color: var(--accent); }
+.scenario summary {
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  list-style: none;
+}
+.scenario summary::-webkit-details-marker { display: none; }
+.scenario summary:hover { background: var(--surface-2); border-radius: var(--radius); }
+.scenario summary { grid-template-columns: 2rem minmax(0, 1fr) 1.2rem; }
+.scenario summary::after { content: "+"; color: var(--accent); font: 700 1.1rem var(--mono); text-align: center; }
+.scenario[open] summary::after { content: "−"; }
+.scenario-number {
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font: 700 0.9rem var(--mono);
+}
+.answer { padding: 0 1rem 0.9rem 3.6rem; border-top: 1px dashed var(--border); }
+.answer p { margin: 0.8rem 0 0; }
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }

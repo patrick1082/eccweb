@@ -15,14 +15,26 @@
       ]
     },
     {
-      "number": "2", "id": "nivel-2", "title": "Comandos esenciales", "status": "proximamente",
+      "number": "2", "id": "nivel-2", "title": "Comandos esenciales", "status": "disponible",
       "description": "El conjunto mínimo de comandos para trabajar cada día.",
-      "guides": []
+      "guides": [
+        { "number": "01", "title": "Elegir el comando adecuado", "url": "/nivel-2/elegir/", "detail": "Un mapa de situaciones y el comando que resuelve cada una.", "time": "8 min" },
+        { "number": "02", "title": "Planificar antes de tocar código", "url": "/nivel-2/planificar/", "detail": "Requisitos con /ecc:plan-prd y planes con /ecc:plan.", "time": "10 min" },
+        { "number": "03", "title": "Construir y probar", "url": "/nivel-2/construir-y-probar/", "detail": "TDD, errores de compilación, cobertura y verificación.", "time": "10 min" },
+        { "number": "04", "title": "Revisar y entregar", "url": "/nivel-2/revisar-y-entregar/", "detail": "Revisión de código, commits y pull requests.", "time": "9 min" },
+        { "number": "05", "title": "Práctica: 10 escenarios", "url": "/nivel-2/escenarios/", "detail": "Elige el comando para cada situación y comprueba tu respuesta.", "time": "15 min" }
+      ]
     },
     {
-      "number": "3", "id": "nivel-3", "title": "Flujos de trabajo", "status": "proximamente",
+      "number": "3", "id": "nivel-3", "title": "Flujos de trabajo", "status": "disponible",
       "description": "De la idea al PR: PRD, plan, TDD, revisión y commit.",
-      "guides": []
+      "guides": [
+        { "number": "01", "title": "El flujo completo", "url": "/nivel-3/el-flujo-completo/", "detail": "Las seis etapas y qué controla cada puerta.", "time": "8 min" },
+        { "number": "02", "title": "De la idea al plan", "url": "/nivel-3/de-la-idea-al-plan/", "detail": "Práctica: prepara un proyecto, escribe su PRD y aprueba un plan.", "time": "20 min" },
+        { "number": "03", "title": "Implementar con TDD", "url": "/nivel-3/implementar-con-tdd/", "detail": "Práctica: del rojo al verde siguiendo el plan.", "time": "20 min" },
+        { "number": "04", "title": "Revisar, hacer commit y entregar", "url": "/nivel-3/revisar-y-entregar/", "detail": "Práctica: revisión, commit y merge del trabajo.", "time": "15 min" },
+        { "number": "05", "title": "Otros caminos", "url": "/nivel-3/otros-caminos/", "detail": "Bugs, compilaciones rotas, retomar el trabajo e ideas pequeñas.", "time": "10 min" }
+      ]
     },
     {
       "number": "4", "id": "nivel-4", "title": "Orquestación", "status": "proximamente",
