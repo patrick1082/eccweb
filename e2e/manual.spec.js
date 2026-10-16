@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
+import site from '../src/_data/site.json' with { type: 'json' };
 
-const routes = ['/', '/nivel-1/que-es-ecc/', '/nivel-1/piezas/', '/nivel-1/como-se-relacionan/', '/nivel-1/comprobar/'];
+const routes = ['/', ...site.levels.flatMap(level => level.guides.map(guide => guide.url))];
 
 test('recorrido completo del nivel 1 desde la portada hasta la autoevaluación', async ({ page }) => {
   await page.goto('/');
@@ -14,7 +15,29 @@ test('recorrido completo del nivel 1 desde la portada hasta la autoevaluación',
   await expect(page.getByRole('img', { name: /comando.*skill.*agente/i })).toBeVisible();
   await turn.getByRole('link', { name: /Comprobar mi ECC/ }).click();
   await expect(page.getByRole('heading', { name: 'Cuándo has terminado' })).toBeVisible();
-  await turn.getByRole('link', { name: /Portada del manual/ }).click();
+  await turn.getByRole('link', { name: /Siguiente nivel.*Elegir el comando adecuado/ }).click();
+  await expect(page).toHaveURL(/\/nivel-2\/elegir\/$/);
+  await expect(page.getByText('Nivel 2 · Comandos esenciales')).toBeVisible();
+});
+
+test('los escenarios del nivel 2 se responden con el teclado y sin JavaScript', async ({ page }) => {
+  await page.goto('/nivel-2/escenarios/');
+  const first = page.locator('details.scenario').first();
+  await expect(first.locator('.answer')).toBeHidden();
+  await first.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(first.locator('.answer')).toBeVisible();
+  await expect(first.locator('.answer')).toContainText('/ecc:plan-prd');
+});
+
+test('el nivel 3 enlaza el flujo completo con las prácticas y termina en la portada', async ({ page }) => {
+  await page.goto('/nivel-3/el-flujo-completo/');
+  await expect(page.getByRole('img', { name: /PRD, plan, TDD, revisión, commit y entrega/ })).toBeVisible();
+  const turn = page.getByRole('navigation', { name: 'Continuar el recorrido' });
+  await turn.getByRole('link', { name: /De la idea al plan/ }).click();
+  await expect(page.getByText('/ecc:plan-prd programa que recibe un texto')).toBeVisible();
+  await page.goto('/nivel-3/otros-caminos/');
+  await turn.getByRole('link', { name: /Fin de lo publicado/ }).click();
   await expect(page).toHaveURL(/\/$/);
 });
 

@@ -9,12 +9,16 @@ export function availableGuides(levels = site.levels) {
 }
 
 /** Previous and next stops of the learning path; the path starts and ends at the home page. */
-export function pathNeighbors(url, guides = availableGuides()) {
+export function pathNeighbors(url, levels = site.levels) {
+  const guides = availableGuides(levels);
   const index = guides.findIndex(guide => guide.url === url);
   if (index === -1) return { previous: home, next: home };
+  const following = guides[index + 1];
+  if (!following) return { previous: guides[index - 1] ?? home, next: { ...home, label: 'Fin de lo publicado' } };
+  const crossesLevel = guideLevel(url, levels).id !== guideLevel(following.url, levels).id;
   return {
     previous: guides[index - 1] ?? home,
-    next: guides[index + 1] ?? { ...home, label: 'Nivel completado' },
+    next: crossesLevel ? { ...following, label: 'Siguiente nivel' } : following,
   };
 }
 

@@ -67,7 +67,7 @@ De cada skill, Claude tiene siempre a mano **su nombre y su descripción**, que 
 - **Analogía**: el detector de metales de un aeropuerto. No decide adónde viajas, pero te para si llevas algo que no debería pasar.
 - **Ejemplos de ECC 2.2.3**:
   - **GateGuard**: bloquea la primera edición de cada archivo y obliga a Claude a explicar qué va a cambiar, por qué y qué pidió el usuario.
-  - **Comprobación previa al commit**: revisa los archivos preparados antes de un `git commit` y detecta, por ejemplo, secretos o `console.log` olvidados.
+  - **Comprobación previa al commit**: revisa los archivos preparados antes de un `git commit` y detecta, por ejemplo, secretos olvidados. Solo se activa con el perfil de hooks `strict`, no con el perfil por defecto.
   - **Aviso de documentos**: avisa cuando se crea un `.md` fuera de las ubicaciones habituales.
 - **Cómo lo reconoces**: aparece un mensaje que no ha escrito Claude, como `[Fact-Forcing Gate]`, seguido de lo que el hook exige antes de continuar.
 

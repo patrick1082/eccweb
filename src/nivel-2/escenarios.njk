@@ -1,0 +1,82 @@
+---
+layout: guide.njk
+title: "Práctica: 10 escenarios"
+description: Diez situaciones reales de trabajo. Decide qué usarías en cada una y despliega la respuesta para comprobarlo.
+number: "05"
+time: 15 min
+goal: Elegirás sin ayuda el comando o la skill de ECC adecuados en al menos 8 de 10 situaciones habituales.
+toc:
+  - { id: como-hacer-esta-practica, title: Cómo hacer esta práctica }
+  - { id: los-escenarios, title: Los escenarios }
+  - { id: cuenta-tus-aciertos, title: Cuenta tus aciertos }
+  - { id: cuando-has-terminado, title: Cuándo has terminado }
+---
+<h2 id="como-hacer-esta-practica">Cómo hacer esta práctica</h2>
+<ol>
+  <li>Lee cada situación y <strong>escribe tu respuesta</strong> en un papel o en un archivo antes de mirar la solución.</li>
+  <li>Despliega la respuesta pulsando sobre la pregunta, o con el teclado: <kbd>Tab</kbd> hasta ella y <kbd>Intro</kbd>.</li>
+  <li>Cuenta como acierto si elegiste la misma pieza de ECC. El nombre exacto de los argumentos no importa.</li>
+</ol>
+<p>No hace falta abrir Claude Code. Si quieres, puedes comprobar algunas respuestas escribiendo <code>/ecc:</code> en tu sesión y leyendo las descripciones.</p>
+
+<h2 id="los-escenarios">Los escenarios</h2>
+<div class="scenario-list">
+  <details class="scenario">
+    <summary><span class="scenario-number">1</span><span class="scenario-text">Quieres crear una herramienta para tu equipo, pero la idea aún es difusa y seguramente tendrá varias entregas.</span></summary>
+    <div class="answer"><p><strong><code>/ecc:plan-prd</code></strong>. Primero hay que aclarar qué problema resuelve y para quién. El PRD lo hace con preguntas y deja la tabla de entregas lista para planificar cada una.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">2</span><span class="scenario-text">Tienes clara una tarea pequeña: añadir un botón de «Exportar a CSV» en una pantalla que ya existe.</span></summary>
+    <div class="answer"><p><strong><code>/ecc:plan</code></strong> con una descripción. Es una tarea acotada y no necesita PRD. El plan te enseña qué archivos tocará y espera tu «sí» antes de escribir código.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">3</span><span class="scenario-text">Ya has aprobado el plan y ahora toca escribir el código de la primera tarea.</span></summary>
+    <div class="answer"><p>La skill <strong><code>tdd-workflow</code></strong>, por ejemplo <code>/ecc:tdd-workflow .claude/plans/…plan.md</code>. Primero escribe la prueba que falla, después el código mínimo y por último el refactor, con commits de control por el camino.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">4</span><span class="scenario-text">Tras actualizar una dependencia, la compilación falla con doce errores de tipos.</span></summary>
+    <div class="answer"><p><strong><code>/ecc:build-fix</code></strong>. Agrupa los errores y los arregla de uno en uno con cambios mínimos. Si un arreglo empeora las cosas o requiere cambiar la arquitectura, se detiene y te pregunta.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">5</span><span class="scenario-text">Acabas de terminar unos cambios y todavía no has hecho commit.</span></summary>
+    <div class="answer"><p><strong><code>/ecc:code-review</code></strong> sin argumentos: revisa tus cambios locales. Si encuentra algún problema CRITICAL o HIGH, indica que no hagas commit hasta arreglarlo y volver a revisar.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">6</span><span class="scenario-text">Quieres hacer un commit solo con los archivos nuevos, sin acordarte de los comandos de git.</span></summary>
+    <div class="answer"><p><strong><code>/ecc:prp-commit only new files</code></strong>. Describes con tus palabras qué guardar y el comando prepara esos archivos y escribe el mensaje con el formato <code>tipo: descripción</code>.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">7</span><span class="scenario-text">Tienes que cerrar el portátil a mitad de una tarea y quieres seguir mañana sin explicarlo todo otra vez.</span></summary>
+    <div class="answer"><p><strong><code>/ecc:save-session</code></strong> antes de cerrar, y mañana <strong><code>/ecc:resume-session</code></strong>. El primero guarda qué funcionó, qué no y en qué estado están los archivos; el segundo lo carga y continúa.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">8</span><span class="scenario-text">A mitad de una implementación te surge una duda sobre cómo funciona <code>git rebase</code>, que no tiene nada que ver con la tarea.</span></summary>
+    <div class="answer"><p><strong><code>/ecc:aside</code></strong>. Responde la pregunta al margen y vuelve a la tarea en curso sin perder el contexto.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">9</span><span class="scenario-text">Antes de abrir un pull request quieres comprobar compilación, tipos, lint, pruebas y seguridad de una sola vez.</span></summary>
+    <div class="answer"><p>La skill <strong><code>verification-loop</code></strong> (el antiguo <code>/verify</code>). Repasa seis fases y termina con un informe PASS o FAIL.</p></div>
+  </details>
+  <details class="scenario">
+    <summary><span class="scenario-number">10</span><span class="scenario-text">Tras pelearte con un error raro, has descubierto la causa y quieres que Claude no tropiece con lo mismo en el futuro.</span></summary>
+    <div class="answer"><p><strong><code>/ecc:learn-eval</code></strong>. Extrae lo aprendido de la sesión, evalúa si merece la pena guardarlo y decide si va al proyecto o a tu configuración global.</p></div>
+  </details>
+</div>
+
+<h2 id="cuenta-tus-aciertos">Cuenta tus aciertos</h2>
+<ul>
+  <li><strong>9 o 10</strong>: dominas el día a día de ECC. Pasa al nivel 3.</li>
+  <li><strong>8</strong>: objetivo cumplido. Repasa la guía del escenario que fallaste.</li>
+  <li><strong>7 o menos</strong>: vuelve a <a href="/nivel-2/elegir/">Elegir el comando adecuado</a> y repite la práctica otro día, sin mirar las respuestas.</li>
+</ul>
+
+<h2 id="cuando-has-terminado">Cuándo has terminado</h2>
+<p>Has completado el nivel 2 si puedes marcar todo esto:</p>
+<ul>
+  <li>He acertado al menos <strong>8 de los 10</strong> escenarios sin mirar las respuestas.</li>
+  <li>Sé la diferencia entre <code>/ecc:plan-prd</code> (qué y por qué) y <code>/ecc:plan</code> (cómo).</li>
+  <li>Sé que el código se escribe con la skill <code>tdd-workflow</code> y que <code>/tdd</code> está retirado.</li>
+  <li>Sé qué significan CRITICAL y HIGH en una revisión y por qué hay que arreglarlos antes del commit.</li>
+  <li>Sé guardar y retomar una sesión, y hacer una pregunta al margen sin perder el hilo.</li>
+</ul>
+<p>En el nivel 3 usarás estos comandos juntos, de principio a fin, en un proyecto real.</p>

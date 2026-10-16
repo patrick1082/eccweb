@@ -55,7 +55,7 @@ Escribe solo esto, **sin pulsar Intro**:
 /ecc:
 ```
 
-Claude Code mostrará una lista de sugerencias que empiezan por `ecc:`. Desplázate por ella. Busca `ecc:plan`, `ecc:plan-prd` y `ecc:code-review`.
+Claude Code mostrará una lista de sugerencias que empiezan por `ecc:`. Desplázate por ella. Busca `/ecc:plan`, `/ecc:plan-prd` y `/ecc:code-review`.
 
 Borra lo escrito antes de seguir. Lo que acabas de ver son **comandos**: atajos que tú escribes.
 
@@ -140,4 +140,4 @@ Has completado el nivel 1 si puedes marcar todo esto:
 - Sé si tengo **rules** instaladas y he visto el servidor **MCP** `chrome-devtools`.
 - Ante cualquier mensaje de la sesión, sé decir si viene de un comando, una skill, un agente o un hook.
 
-Cuando termines, puedes borrar la carpeta de pruebas con `rm -r ~/practica-ecc`. El nivel 2, con los comandos esenciales para el día a día, llegará en el próximo hito.
+Conserva la carpeta `~/practica-ecc`: la volverás a usar en el nivel 3. El siguiente paso es el [nivel 2](/nivel-2/elegir/), con los comandos esenciales para el día a día.

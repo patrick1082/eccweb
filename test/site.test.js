@@ -7,8 +7,16 @@ import { parseHTML } from 'linkedom';
 import { availableGuides, guideLevel, pathNeighbors } from '../eleventy.config.js';
 import site from '../src/_data/site.json' with { type: 'json' };
 
-const guides = ['/nivel-1/que-es-ecc/', '/nivel-1/piezas/', '/nivel-1/como-se-relacionan/', '/nivel-1/comprobar/'];
+const levelGuides = {
+  'nivel-1': ['/nivel-1/que-es-ecc/', '/nivel-1/piezas/', '/nivel-1/como-se-relacionan/', '/nivel-1/comprobar/'],
+  'nivel-2': ['/nivel-2/elegir/', '/nivel-2/planificar/', '/nivel-2/construir-y-probar/',
+    '/nivel-2/revisar-y-entregar/', '/nivel-2/escenarios/'],
+  'nivel-3': ['/nivel-3/el-flujo-completo/', '/nivel-3/de-la-idea-al-plan/', '/nivel-3/implementar-con-tdd/',
+    '/nivel-3/revisar-y-entregar/', '/nivel-3/otros-caminos/'],
+};
+const guides = Object.values(levelGuides).flat();
 const pages = ['/', ...guides];
+const practices = ['/nivel-1/comprobar/', '/nivel-2/escenarios/', '/nivel-3/revisar-y-entregar/'];
 const documents = new Map();
 let output;
 let probe;
@@ -48,18 +56,25 @@ after(async () => {
   if (output) await rm(output, { recursive: true, force: true });
 });
 
-test('el principiante puede abrir la portada y las cuatro guías del nivel 1', () => {
+test('el principiante puede abrir la portada y las guías de los niveles 1, 2 y 3', () => {
   for (const route of pages) assert.ok(documents.has(route), `Falta la página ${route}`);
 });
 
-test('el recorrido sigue el orden de site.json y vuelve a la portada al acabar el nivel', () => {
+test('el recorrido cruza de un nivel al siguiente y vuelve a la portada al final de lo publicado', () => {
   assert.deepEqual(availableGuides().map(guide => guide.url), guides);
   assert.equal(pathNeighbors(guides[0]).previous.url, '/');
   assert.equal(pathNeighbors(guides[1]).previous.url, guides[0]);
   assert.equal(pathNeighbors(guides[1]).next.url, guides[2]);
+  assert.equal(pathNeighbors(guides[1]).next.label, undefined);
+  const lastOfLevel1 = levelGuides['nivel-1'].at(-1);
+  assert.equal(pathNeighbors(lastOfLevel1).next.url, levelGuides['nivel-2'][0]);
+  assert.equal(pathNeighbors(lastOfLevel1).next.label, 'Siguiente nivel');
+  assert.equal(pathNeighbors(levelGuides['nivel-2'][0]).previous.url, lastOfLevel1);
   assert.equal(pathNeighbors(guides.at(-1)).next.url, '/');
+  assert.equal(pathNeighbors(guides.at(-1)).next.label, 'Fin de lo publicado');
   assert.equal(pathNeighbors('/no-existe/').next.url, '/');
   assert.deepEqual(guideLevel(guides[2]), { id: 'nivel-1', number: '1', title: 'Conceptos', total: '04' });
+  assert.deepEqual(guideLevel(levelGuides['nivel-3'][0]), { id: 'nivel-3', number: '3', title: 'Flujos de trabajo', total: '05' });
   assert.equal(guideLevel('/no-existe/'), undefined);
 });
 
@@ -82,10 +97,28 @@ test('la guía de piezas explica las seis piezas de ECC y termina con un glosari
   assert.ok(documents.get('/nivel-1/piezas/').getElementById('glosario'), 'Falta el glosario');
 });
 
-test('la práctica termina con una autoevaluación del nivel', () => {
-  const document = documents.get('/nivel-1/comprobar/');
-  assert.ok(document.getElementById('cuando-has-terminado'));
-  assert.ok(document.querySelectorAll('#cuando-has-terminado ~ ul li, #cuando-has-terminado + ul li').length >= 3);
+test('la práctica de cada nivel termina con una autoevaluación', () => {
+  for (const route of practices) {
+    const document = documents.get(route);
+    assert.ok(document.getElementById('cuando-has-terminado'), `${route} no tiene autoevaluación`);
+    assert.ok(document.querySelectorAll('#cuando-has-terminado ~ ul li').length >= 3, `${route} tiene una autoevaluación vacía`);
+  }
+});
+
+test('el nivel 2 propone al menos diez escenarios, cada uno con su respuesta plegada', () => {
+  const scenarios = [...documents.get('/nivel-2/escenarios/').querySelectorAll('details.scenario')];
+  assert.ok(scenarios.length >= 10, `Solo hay ${scenarios.length} escenarios`);
+  for (const scenario of scenarios) {
+    assert.ok(scenario.querySelector('summary')?.textContent.trim(), 'Un escenario no tiene pregunta');
+    assert.match(scenario.querySelector('.answer')?.textContent ?? '', /ecc:|tdd-workflow|verification-loop/,
+      'Un escenario no nombra la pieza de ECC que responde');
+  }
+});
+
+test('el flujo completo del nivel 3 se explica con un diagrama accesible', () => {
+  const diagram = documents.get('/nivel-3/el-flujo-completo/').querySelector('figure.diagram svg[role="img"]');
+  assert.ok(diagram, 'Falta el diagrama del flujo');
+  assert.ok(diagram.querySelector('title')?.textContent.trim());
 });
 
 test('cada página declara la versión de ECC que documenta', () => {
@@ -104,7 +137,7 @@ test('los niveles en preparación se anuncian sin enlaces rotos', () => {
     }
   }
   const upcoming = site.levels.filter(level => level.status !== 'disponible');
-  assert.equal(upcoming.length, 3);
+  assert.deepEqual(upcoming.map(level => level.id), ['nivel-4']);
   const home = documents.get('/');
   for (const level of upcoming) {
     const card = home.getElementById(level.id);
@@ -141,12 +174,14 @@ test('el manual funciona sin recursos remotos ni JavaScript', async () => {
 });
 
 test('la miga de pan de cada guía sale de site.json', () => {
-  const level = site.levels[0];
-  guides.forEach((route, index) => {
-    const eyebrow = documents.get(route).querySelector('.guide-header .eyebrow').textContent;
-    assert.match(eyebrow, new RegExp(`Nivel ${level.number} · ${level.title}`));
-    assert.match(eyebrow, new RegExp(`Guía ${level.guides[index].number} de ${String(level.guides.length).padStart(2, '0')}`));
-  });
+  for (const level of site.levels.filter(candidate => candidate.status === 'disponible')) {
+    assert.deepEqual(level.guides.map(guide => guide.url), levelGuides[level.id]);
+    level.guides.forEach(guide => {
+      const eyebrow = documents.get(guide.url).querySelector('.guide-header .eyebrow').textContent;
+      assert.match(eyebrow, new RegExp(`Nivel ${level.number} · ${level.title}`));
+      assert.match(eyebrow, new RegExp(`Guía ${guide.number} de ${String(level.guides.length).padStart(2, '0')}`));
+    });
+  }
 });
 
 test('el Markdown no puede inyectar HTML ni enlaces javascript y los metadatos se escapan', () => {
